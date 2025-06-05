@@ -1,0 +1,35 @@
+# Node.js build artifacts and dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# React build output folder (if copying source first, then building in Docker)
+# The current Dockerfile builds in a stage, so 'build' in the source directory
+# shouldn't be copied if it exists.
+build
+
+# Git specific files
+.git
+.gitignore
+
+# Docker specific files (usually not needed to ignore Dockerfile itself)
+# Dockerfile
+# .dockerignore
+
+# Environment specific files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and OS specific files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Desktop.ini
+Thumbs.db

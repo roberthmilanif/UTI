@@ -68,3 +68,58 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Running with Docker
+
+This section describes how to build and run the application using Docker.
+
+### Prerequisites
+
+Ensure you have Docker installed on your system. You can download it from [Docker's official website](https://www.docker.com/get-started).
+
+### Building the Docker Image
+
+To build the Docker image for this application, navigate to the project's root directory (where the `Dockerfile` is located) and run the following command:
+
+```bash
+docker build -t patient-handover-app .
+```
+
+This command will:
+- `docker build`: Initiates the Docker image build process.
+- `-t patient-handover-app`: Tags the image with the name `patient-handover-app` and version `latest` (implicitly). You can also use a specific tag like `patient-handover-app:1.0`.
+- `.`: Specifies that the build context (including the `Dockerfile` and application files) is the current directory.
+
+### Running the Docker Container
+
+Once the image is built, you can run the application in a Docker container using the following command:
+
+```bash
+docker run -d -p 8080:80 --name patient-handover-container patient-handover-app
+```
+
+This command will:
+- `docker run`: Starts a new container from the specified image.
+- `-d`: Runs the container in detached mode (in the background).
+- `-p 8080:80`: Maps port `8080` on your host machine to port `80` inside the container (where Nginx is listening). You can change `8080` to another available port on your host if needed.
+- `--name patient-handover-container`: Assigns a custom name to the running container for easier management.
+- `patient-handover-app`: Specifies the image to run.
+
+After running the command, the application should be accessible in your web browser at:
+
+[http://localhost:8080](http://localhost:8080)
+
+### Managing the Container
+
+- To stop the container:
+  ```bash
+  docker stop patient-handover-container
+  ```
+- To remove the container (after stopping it):
+  ```bash
+  docker rm patient-handover-container
+  ```
+- To view logs:
+  ```bash
+  docker logs patient-handover-container
+  ```
