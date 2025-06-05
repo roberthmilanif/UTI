@@ -1,0 +1,45 @@
+.navigation-bar {
+  background-color: #343a40; /* Dark background */
+  padding: 12px 20px; /* Slightly more padding */
+  border-bottom: 3px solid #007bff; /* Accent border */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navigation-bar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center; /* Vertically align items if they have different heights */
+}
+
+.navigation-bar li {
+  margin-right: 25px; /* Slightly more margin */
+}
+
+.navigation-bar li:last-child {
+  margin-right: 0; /* No margin for the last item */
+}
+
+.navigation-bar a {
+  text-decoration: none;
+  color: #f8f9fa; /* Light text color for contrast */
+  font-weight: 500; /* Medium font weight */
+  padding: 8px 0; /* Padding for larger clickable area, adjust as needed */
+  transition: color 0.2s ease-in-out;
+}
+
+.navigation-bar a:hover,
+.navigation-bar a:focus { /* Added focus state for accessibility */
+  color: #007bff; /* Highlight color on hover/focus */
+  text-decoration: none; /* Ensure no underline on hover */
+}
+
+/* Style for active link can be added if NavLink is used,
+   but for simple Link, this relies on manual state or is omitted.
+   If you use NavLink from react-router-dom, you can use its 'active' class.
+   .navigation-bar a.active {
+     color: #007bff;
+     border-bottom: 2px solid #007bff;
+   }
+*/

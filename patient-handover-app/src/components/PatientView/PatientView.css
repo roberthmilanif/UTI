@@ -1,0 +1,54 @@
+.patient-view-container {
+  /* Container styling is now handled by .view-column in App.css */
+  /* padding: 20px; */ /* Kept from App.css .view-column */
+  /* border: 1px solid #ddd; */ /* Kept from App.css .view-column via box-shadow */
+  /* margin: 20px; */ /* Handled by gap in .main-layout */
+  /* border-radius: 8px; */ /* Kept from App.css .view-column */
+  /* background-color: #fff; */ /* Kept from App.css .view-column */
+}
+
+.patient-view-container h2 {
+  /* color: #333; */ /* Inherits from body or App.css h2 */
+  border-bottom: 2px solid #007bff; /* Accent color for the main title */
+  padding-bottom: 10px;
+  margin-bottom: 25px; /* More space after title */
+  font-size: 1.5em; /* Consistent with PatientList title */
+}
+
+.patient-info-section {
+  margin-bottom: 25px; /* More space between sections */
+}
+
+.patient-info-section h3 {
+  /* color: #555; */ /* Inherits */
+  margin-bottom: 12px; /* Space below section titles */
+  font-size: 1.2em; /* Slightly larger section titles */
+  border-bottom: 1px solid #eee; /* Subtle line under section titles */
+  padding-bottom: 6px;
+}
+
+.patient-info-section p,
+.patient-info-section ul {
+  /* margin-left: 10px; */ /* Remove specific margin, rely on padding or natural flow */
+  /* color: #666; */ /* Inherits */
+  line-height: 1.6; /* Improved readability for paragraphs */
+  font-size: 0.95em;
+}
+
+.patient-info-section ul {
+  list-style-type: disc;
+  padding-left: 25px; /* Standard padding for lists */
+  margin-top: 5px; /* Space above list if it follows a p or h3 directly */
+}
+
+.patient-info-section li {
+  margin-bottom: 6px; /* Space between list items */
+}
+
+/* Styling for "Select a patient" message */
+.patient-view-container > p {
+  padding: 20px;
+  text-align: center;
+  font-size: 1.1em;
+  color: #6c757d; /* Bootstrap muted color */
+}

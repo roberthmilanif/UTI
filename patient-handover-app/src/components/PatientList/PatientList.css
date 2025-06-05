@@ -1,0 +1,85 @@
+.patient-list-container {
+  padding: 20px;
+}
+
+.patient-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.patient-list-container {
+  /* Container styling is now handled by .list-column in App.css */
+}
+
+.patient-list-container h2 {
+  margin-bottom: 15px; /* Space below the "Patient List" title */
+  font-size: 1.5em; /* Slightly larger title */
+}
+
+.patient-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0; /* Remove default ul margin */
+}
+
+.patient-list-item {
+  background-color: #fff; /* White background for items */
+  border: 1px solid #e0e0e0; /* Lighter border */
+  padding: 12px 15px; /* More padding */
+  margin-bottom: 8px; /* Space between items */
+  border-radius: 6px; /* More rounded corners */
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.patient-list-item .patient-info {
+  flex-grow: 1;
+  font-weight: 500; /* Slightly bolder text for name */
+}
+
+.patient-list-item:hover {
+  background-color: #f8f9fa; /* Very light grey on hover */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.patient-list-item.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #0069d9; /* Darker blue for selected border */
+  box-shadow: 0 2px 5px rgba(0,123,255,0.3);
+}
+
+.patient-list-item.selected .patient-info {
+  color: white; /* Ensure text color is white when selected */
+}
+
+.patient-list-item.selected .edit-button {
+  background-color: #fff; /* White button on selected item */
+  color: #007bff; /* Blue text for button */
+  border: 1px solid #007bff; /* Optional: border for button */
+}
+
+.edit-button {
+  background-color: #6c757d; /* Grey button */
+  color: white;
+  border: none;
+  padding: 6px 12px; /* Adjusted padding */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875em; /* Slightly smaller font */
+  margin-left: 15px; /* More space from name */
+  transition: background-color 0.2s ease-in-out;
+}
+
+.edit-button:hover {
+  background-color: #5a6268; /* Darker grey on hover */
+}
+
+.patient-list-container p { /* Styling for "No patients available" message */
+  padding: 10px;
+  text-align: center;
+  color: #6c757d;
+}

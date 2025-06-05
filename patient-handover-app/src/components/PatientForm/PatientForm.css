@@ -1,0 +1,91 @@
+.patient-form-container {
+  background-color: #fff; /* White background for the form area */
+  padding: 25px; /* More padding */
+  border-radius: 8px; /* Consistent rounding */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Softer shadow */
+  max-width: 700px; /* Max width for larger screens */
+  margin: 20px auto; /* Centering the form on the page if it's the only element */
+}
+
+.patient-form-container h2 {
+  /* color: #333; */ /* Inherits */
+  border-bottom: 2px solid #007bff; /* Accent color */
+  padding-bottom: 10px;
+  margin-bottom: 25px; /* More space after title */
+  text-align: center;
+  font-size: 1.5em; /* Consistent title size */
+}
+
+.patient-form .form-group {
+  margin-bottom: 20px; /* More space between form groups */
+}
+
+.patient-form label {
+  display: block;
+  margin-bottom: 8px; /* More space below label */
+  font-weight: 600; /* Slightly bolder labels */
+  /* color: #555; */ /* Inherits */
+  font-size: 0.95em;
+}
+
+.patient-form input[type="text"],
+.patient-form input[type="date"],
+.patient-form textarea {
+  width: 100%;
+  padding: 12px; /* More padding in inputs */
+  border: 1px solid #ced4da; /* Standard Bootstrap input border color */
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1em; /* Consistent font size */
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.patient-form input[type="text"]:focus,
+.patient-form input[type="date"]:focus,
+.patient-form textarea:focus {
+  border-color: #80bdff; /* Highlight color on focus */
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* Focus shadow */
+}
+
+.patient-form textarea {
+  resize: vertical;
+  min-height: 80px; /* Minimum height for textareas */
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px; /* More space between buttons */
+  margin-top: 25px; /* Space above buttons */
+  justify-content: flex-end; /* Align buttons to the right */
+}
+
+.patient-form .submit-button,
+.patient-form .cancel-button {
+  color: white;
+  padding: 10px 18px; /* Adjusted padding */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em; /* Consistent font size */
+  font-weight: 500;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.patient-form .submit-button {
+  background-color: #007bff; /* Primary button color */
+}
+
+.patient-form .submit-button:hover {
+  background-color: #0069d9; /* Darker on hover */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.patient-form .cancel-button {
+  background-color: #6c757d; /* Secondary/cancel button color */
+}
+
+.patient-form .cancel-button:hover {
+  background-color: #5a6268; /* Darker on hover */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
