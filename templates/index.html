@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Passometro de Casos - UTI</title>
+    <style>
+        body {font-family: Arial, sans-serif; margin: 2em;}
+        table {border-collapse: collapse; width: 100%;}
+        th, td {border: 1px solid #ccc; padding: 8px; text-align: left;}
+        th {background-color: #f2f2f2;}
+        form {margin-bottom: 2em;}
+    </style>
+</head>
+<body>
+    <h1>Passometro de Casos - UTI</h1>
+    <form method="POST" action="/add">
+        <label>Paciente: <input type="text" name="patient_name" required></label><br>
+        <label>Leito: <input type="text" name="bed_number" required></label><br>
+        <label>Diagnóstico: <input type="text" name="diagnosis" required></label><br>
+        <label>Notas:<br><textarea name="notes" rows="4" cols="50"></textarea></label><br>
+        <button type="submit">Adicionar Caso</button>
+    </form>
+    <table>
+        <tr>
+            <th>Paciente</th>
+            <th>Leito</th>
+            <th>Diagnóstico</th>
+            <th>Notas</th>
+            <th>Ação</th>
+        </tr>
+        {% for case in cases %}
+        <tr>
+            <td>{{ case.patient_name }}</td>
+            <td>{{ case.bed_number }}</td>
+            <td>{{ case.diagnosis }}</td>
+            <td>{{ case.notes }}</td>
+            <td><a href="{{ url_for('delete_case', case_id=case.id) }}">Excluir</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
