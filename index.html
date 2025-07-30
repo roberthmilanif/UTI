@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel Interativo da UTI com IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 h-screen flex flex-col">
+  <header class="bg-blue-800 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Painel Interativo da UTI com IA</h1>
+    <button id="shareBtn" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded">Partilhar</button>
+  </header>
+  <main class="flex flex-1 overflow-hidden">
+    <div id="patientList" class="w-1/3 overflow-y-auto bg-white border-r"></div>
+    <div id="patientDetails" class="w-2/3 p-4 overflow-y-auto">
+      <p class="text-gray-600">Selecione um paciente na lista ao lado.</p>
+    </div>
+  </main>
+
+<script>
+const patientData = [
+    {
+        leito: "G2-10", nome: "DJANIRA A. B. LIMA", idade: 86, admissao: "27/07",
+        diagnostico: "Dor abdominal em investigação, com hipóteses de colecistite aguda versus equivalentes anginosos.",
+        historico: "HAS, FA. Nega alergias. Em uso de marcapasso.",
+        medicamentos: "Apixabana, Losartana, Furosemida (inferido de HAS, FA).",
+        exameFisico: "Estável hemodinamicamente, eupneica em ar ambiente. Abdome flácido, indolor, sem sinais de irritação.",
+        examesResultados: "Troponina em declínio (31.6 -> 25.0). Piora da função renal (Cr 1.56 -> 1.76). ECO-TT com FE 61%. TC de Abdome sugere processo inflamatório em vesícula biliar.",
+        plano: "Manter em UTI para monitorização. Hidratação venosa criteriosa. Aguarda USG abdominal e parecer da Cirurgia Geral.",
+        pendencias: "Avaliação da Cardiologia; Realização de USG de abdome total."
+    },
+    {
+        leito: "G2-02", nome: "CLEONICE M. DO NASCIMENTO", idade: 72, admissao: "28/07",
+        diagnostico: "Síncope/Queda em investigação, possivelmente secundária a hiponatremia sintomática.",
+        historico: "HAS, dor articular crônica.",
+        medicamentos: "Clonazepam, Pregabalina, Losartana, Hidroclorotiazida, Nimesulida.",
+        exameFisico: "Consciente e orientada, sem déficits focais. Glasgow 15. Força preservada.",
+        examesResultados: "Hiponatremia (Na: 121 mEq/L). TC de Crânio com redução volumétrica encefálica difusa, sem lesões agudas.",
+        plano: "Correção de sódio com salina 3% em BIC. Suspenso HCTZ. Profilaxia para TEV. Fisioterapia.",
+        pendencias: "Coleta de culturas para rastreio infeccioso."
+    },
+    {
+        leito: "G1-05", nome: "JOSE R. DA SILVA", idade: 65, admissao: "29/07",
+        diagnostico: "Insuficiência respiratória aguda secundária a pneumonia.",
+        historico: "Diabetes tipo 2, tabagismo pregresso.",
+        medicamentos: "Insulina NPH, Ceftriaxona, Azitromicina.",
+        exameFisico: "Uso de O2 suplementar, saturação 94%. Roncos difusos em ambos os hemitórax.",
+        examesResultados: "RX de tórax com consolidação em base direita. Leucocitose 15.000.",
+        plano: "Ajuste de antibioticoterapia conforme cultura. Avaliar desmame de O2.",
+        pendencias: "Aguardar resultado de hemoculturas."
+    },
+    {
+        leito: "G1-03", nome: "MARIA C. ALMEIDA", idade: 55, admissao: "26/07",
+        diagnostico: "Pós-operatório de cirurgia abdominal, evoluindo bem.",
+        historico: "Hipotireoidismo em uso de levotiroxina.",
+        medicamentos: "Levotiroxina, Cefazolina, Paracetamol.",
+        exameFisico: "Estável, ferida operatória limpa e seca.",
+        examesResultados: "Hemoglobina 12 g/dL, leucócitos normais.",
+        plano: "Iniciar dieta oral. Manter analgesia. Planejar alta da UTI amanhã.",
+        pendencias: "Avaliar função intestinal."
+    },
+    {
+        leito: "G2-08", nome: "ANTONIO P. SOUSA", idade: 78, admissao: "25/07",
+        diagnostico: "AVC isquêmico em tratamento agudo.",
+        historico: "HAS, dislipidemia.",
+        medicamentos: "AAS, Atorvastatina, Clopidogrel.",
+        exameFisico: "Hemiparesia direita, comunica-se com dificuldade.",
+        examesResultados: "TC crânio com lesão hipodensa em território de ACM esquerda.",
+        plano: "Fisioterapia motora e fonoaudiologia. Prevenir complicações.",
+        pendencias: "Aguardar avaliação da Fonoaudiologia."
+    }
+];
+let selectedPatientIndex = 0;
+
+function renderPatientList() {
+  const list = document.getElementById('patientList');
+  list.innerHTML = '';
+  patientData.forEach((p,i) => {
+    const card = document.createElement('div');
+    card.className = 'patient-card p-4 border-b cursor-pointer hover:bg-blue-50';
+    card.innerHTML = `<p class="font-bold">${p.nome}</p><p>Idade: ${p.idade}</p><p>Leito: ${p.leito}</p>`;
+    card.addEventListener('click', () => selectPatient(i));
+    list.appendChild(card);
+  });
+}
+
+function patientToString(p){
+  return `Leito: ${p.leito}; Nome: ${p.nome}; Idade: ${p.idade}; Admissão: ${p.admissao}; Diagnóstico: ${p.diagnostico}; Histórico: ${p.historico}; Medicamentos: ${p.medicamentos}; Exame Físico: ${p.exameFisico}; Resultados de Exames: ${p.examesResultados}; Plano: ${p.plano}; Pendências: ${p.pendencias}`;
+}
+
+function selectPatient(index){
+  selectedPatientIndex = index;
+  document.querySelectorAll('#patientList .patient-card').forEach((el,i)=>{
+    el.classList.toggle('bg-blue-100', i===index);
+    if(i===index){ el.classList.add('border-l-4','border-blue-500'); }
+    else { el.classList.remove('border-l-4','border-blue-500'); }
+  });
+  const p = patientData[index];
+  const details = document.getElementById('patientDetails');
+  details.innerHTML = `
+    <h2 class="text-2xl font-bold mb-2">${p.nome} - Leito ${p.leito}</h2>
+    <p class="mb-4">Idade: ${p.idade} anos | Admissão: ${p.admissao}</p>
+    <div class="space-y-4">
+      <section><h3 class="font-semibold">Diagnóstico Principal</h3><p>${p.diagnostico}</p></section>
+      <section><h3 class="font-semibold">Histórico</h3><p>${p.historico}</p></section>
+      <section><h3 class="font-semibold">Medicações</h3><p>${p.medicamentos}</p></section>
+      <section><h3 class="font-semibold">Exame Físico</h3><p>${p.exameFisico}</p></section>
+      <section><h3 class="font-semibold">Resultados de Exames</h3><p>${p.examesResultados}</p></section>
+      <section><h3 class="font-semibold">Plano</h3><p>${p.plano}</p></section>
+      <section><h3 class="font-semibold">Pendências</h3><p>${p.pendencias}</p></section>
+      <section>
+        <h3 class="text-lg font-bold mt-4">Assistente de IA ✨</h3>
+        <div class="flex flex-wrap gap-2 my-2">
+          <button class="gemini-btn bg-green-500 text-white px-3 py-1 rounded" data-action="resumo">Gerar Resumo</button>
+          <button class="gemini-btn bg-green-500 text-white px-3 py-1 rounded" data-action="simplificar">Simplificar para Familiares</button>
+          <button class="gemini-btn bg-green-500 text-white px-3 py-1 rounded" data-action="passos">Sugerir Próximos Passos</button>
+          <button class="gemini-btn bg-green-500 text-white px-3 py-1 rounded" data-action="interacoes">Verificar Interações Medicamentosas</button>
+          <button class="gemini-btn bg-green-500 text-white px-3 py-1 rounded" data-action="alta">Gerar Plano de Alta</button>
+          <button class="gemini-btn bg-green-500 text-white px-3 py-1 rounded" data-action="soap">Redigir Nota de Evolução (SOAP)</button>
+        </div>
+        <div id="gemini-output" class="border p-2 rounded bg-gray-50 min-h-[60px]"></div>
+      </section>
+      <section id="charts-section" class="mt-8">
+        <h3 class="text-lg font-bold">Visão Geral da Unidade</h3>
+        <div class="flex flex-col md:flex-row gap-4 mt-2">
+          <div class="flex-1 h-64"><canvas id="ageChart"></canvas></div>
+          <div class="flex-1 h-64"><canvas id="bedChart"></canvas></div>
+        </div>
+      </section>
+    </div>
+  `;
+  attachGeminiHandlers(p);
+  renderCharts();
+}
+
+function attachGeminiHandlers(p){
+  const buttons = document.querySelectorAll('.gemini-btn');
+  buttons.forEach(btn=>{
+    btn.onclick = () => {
+      let prompt = '';
+      const dataStr = patientToString(p);
+      switch(btn.dataset.action){
+        case 'resumo':
+          prompt = `Você é um médico intensivista. Crie um resumo conciso para passagem de plantão para um paciente na UTI com as seguintes informações: ${dataStr}. Organize o resumo em seções claras: "Situação Atual", "Plano" e "Pendências".`;
+          break;
+        case 'simplificar':
+          prompt = `Você é um médico se comunicando com a família de um paciente na UTI. Explique a seguinte situação clínica em linguagem simples, clara e empática, evitando jargões médicos: Diagnóstico: ${p.diagnostico}; Exames: ${p.examesResultados}; Plano: ${p.plano}. Comece com "Prezados familiares," e termine com uma nota de apoio.`;
+          break;
+        case 'passos':
+          prompt = `Como um médico especialista consultor, analise o seguinte caso clínico de um paciente na UTI e sugira os próximos passos e possíveis diagnósticos diferenciais: ${dataStr}. Forneça sua resposta em duas seções: "Diagnósticos Diferenciais a Considerar" e "Sugestões de Próximos Passos".`;
+          break;
+        case 'interacoes':
+          prompt = `Aja como um farmacêutico clínico. Analise a seguinte lista de medicamentos para o paciente e identifique potenciais interações medicamentosas: ${p.medicamentos}. Para cada interação, descreva o risco potencial, a gravidade (leve, moderada, grave) e sugira uma recomendação de manejo.`;
+          break;
+        case 'alta':
+          prompt = `Aja como um médico experiente criando um plano de alta para um paciente que está saindo da UTI. Com base nas informações abaixo, crie um plano de alta estruturado: Resumo do caso: ${p.diagnostico}. Medicações: ${p.medicamentos}. O plano deve incluir as seguintes seções: "Resumo da Internação", "Medicações na Alta", "Recomendações de Acompanhamento" e "Sinais de Alerta".`;
+          break;
+        case 'soap':
+          prompt = `Aja como um médico intensivista redigindo uma nota de evolução diária em formato SOAP. - S (Subjetivo): por favor, inferir o estado do paciente. - O (Objetivo): Utilize os seguintes dados: Exame Físico: ${p.exameFisico}; Resultados de Exames: ${p.examesResultados}. - A (Avaliação): crie uma lista numerada de problemas ativos. - P (Plano): detalhe o plano para cada problema.`;
+          break;
+      }
+      callGeminiApi(prompt, buttons);
+    };
+  });
+}
+
+function callGeminiApi(prompt, buttons){
+  const output = document.getElementById('gemini-output');
+  buttons.forEach(b=>b.disabled = true);
+  output.textContent = 'Carregando...';
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({contents:[{parts:[{text: prompt}]}]})
+  })
+  .then(r => r.json())
+  .then(d => {
+    const text = d.candidates?.[0]?.content?.parts?.[0]?.text || 'Erro ao gerar resposta.';
+    output.textContent = text;
+  })
+  .catch(()=> output.textContent = 'Erro ao contactar a API.')
+  .finally(()=> buttons.forEach(b=>b.disabled=false));
+}
+
+function copyShareLink(){
+  const url = `${location.origin}${location.pathname}?patient=${selectedPatientIndex}`;
+  const fallback = (text) => {
+    const t = document.createElement('textarea');
+    t.value = text; document.body.appendChild(t); t.select();
+    document.execCommand('copy'); document.body.removeChild(t);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).catch(()=> fallback(url));
+  } else {
+    fallback(url);
+  }
+  alert('Link copiado!');
+}
+
+document.getElementById('shareBtn').addEventListener('click', copyShareLink);
+
+function renderCharts(){
+  const ageCtx = document.getElementById('ageChart').getContext('2d');
+  const names = patientData.map(p=>p.nome);
+  const ages = patientData.map(p=>p.idade);
+  new Chart(ageCtx, {
+    type: 'bar',
+    data: { labels: names, datasets: [{ data: ages, backgroundColor: '#3182ce' }] },
+    options: { indexAxis: 'y', responsive: true, plugins:{ legend:{display:false}, title:{display:true,text:'Idade dos Pacientes'} } }
+  });
+
+  const bedCtx = document.getElementById('bedChart').getContext('2d');
+  const g1 = patientData.filter(p=>p.leito.startsWith('G1')).length;
+  const g2 = patientData.filter(p=>p.leito.startsWith('G2')).length;
+  new Chart(bedCtx, {
+    type: 'doughnut',
+    data: { labels:['G1','G2'], datasets:[{ data:[g1,g2], backgroundColor:['#4c51bf','#63b3ed'] }] },
+    options: { responsive: true, plugins:{ title:{display:true,text:'Distribuição por Leito'} } }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderPatientList();
+  const params = new URLSearchParams(location.search);
+  const index = parseInt(params.get('patient'));
+  if(!isNaN(index) && patientData[index]){
+    selectPatient(index);
+  } else {
+    selectPatient(0);
+  }
+});
+</script>
+</body>
+</html>
